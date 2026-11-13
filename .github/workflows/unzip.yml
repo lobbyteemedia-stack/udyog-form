@@ -1,0 +1,21 @@
+name: unzip-site
+on:
+  push:
+    paths: ['udyog-site.zip']
+permissions:
+  contents: write
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract zip into repo
+        run: |
+          unzip -o udyog-site.zip -d /tmp/x
+          cp -a /tmp/x/udyog-site/. .
+          rm -f udyog-site.zip
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add -A
+          git commit -m "Extract site files" || echo "nothing to commit"
+          git push
