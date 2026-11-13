@@ -1,0 +1,26 @@
+name: unzip-any
+on:
+  push:
+    paths: ['.github/workflows/unzip2.yml', '*.zip']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract any zip into repo
+        run: |
+          shopt -s nullglob
+          for z in *.zip; do
+            rm -rf /tmp/x && unzip -o "$z" -d /tmp/x
+            if [ -d /tmp/x/udyog-site ]; then cp -a /tmp/x/udyog-site/. .; else cp -a /tmp/x/. .; fi
+            git rm -q --cached "$z" || true
+            rm -f "$z"
+          done
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add -A
+          git commit -m "Extract site files" || echo "nothing to commit"
+          git push
