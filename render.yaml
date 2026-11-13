@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: udyog-form
+    runtime: docker
+    plan: free
+    healthCheckPath: /healthz
+    envVars:
+      - key: DATABASE_URL
+        sync: false        # Neon থেকে কপি করা connection string
+      - key: ADMIN_PASS
+        sync: false        # অ্যাডমিন প্যানেলের পাসওয়ার্ড
+      - key: ADMIN_USER
+        value: admin
+      - key: BKASH_NUMBER
+        value: "01744311005"
+      - key: NAGAD_NUMBER
+        value: "01744311005"
+      - key: PRICE
+        value: "100"
+      - key: SITE_NAME
+        value: উদ্যোগ ফরম সহায়তা
+      - key: KEEP_DAYS
+        value: "60"
